@@ -24,9 +24,19 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 })
 
+app.get('/', (req, res) => {
+    var cursor = db.collection('quotes').find();
+    
+
+    db.collection('quotes').find().toArray(function(err, results) {
+        console.log(results)
+       
+      })
+    
+})
 
 app.post('/quotes', (req, res) => {
-    db.collection('quotes').save(req.body, (err, result) => {
+    db.collection('quotes').insertOne(req.body, (err, result) => {   // Opretter collection 'quotes' i db hvis den ikke eksiterer, hvis den eksiterer så tilføjer den til collectionen.
         if (err) return console.log(err);
 
         console.log('saved to database');
