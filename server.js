@@ -20,20 +20,19 @@ MongoClient.connect('mongodb://admin:Admin123@ds223253.mlab.com:23253/note-app',
 
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-})
+//app.get('/', (req, res) => {
+    //res.sendFile(__dirname + '/index.html');
+//})
 
 app.get('/', (req, res) => {
     var cursor = db.collection('quotes').find();
-    
-
     db.collection('quotes').find().toArray(function(err, results) {
-        console.log(results)
-       
+        console.log(results)   
       })
     
 })
+
+app.set('view engine', 'ejs');
 
 app.post('/quotes', (req, res) => {
     db.collection('quotes').insertOne(req.body, (err, result) => {   // Opretter collection 'quotes' i db hvis den ikke eksiterer, hvis den eksiterer så tilføjer den til collectionen.
