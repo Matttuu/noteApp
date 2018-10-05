@@ -34,6 +34,8 @@ app.get('/', (req, res) => {
 
 app.set('view engine', 'ejs');
 
+res.render(view, locals);
+
 app.post('/quotes', (req, res) => {
     db.collection('quotes').insertOne(req.body, (err, result) => {   // Opretter collection 'quotes' i db hvis den ikke eksiterer, hvis den eksiterer så tilføjer den til collectionen.
         if (err) return console.log(err);
