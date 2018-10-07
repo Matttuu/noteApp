@@ -28,14 +28,34 @@ app.get('/', (req, res) => {
 
 app.post('/quotes', (req, res) => {
     db.collection('quotes').insertOne(req.body, (err, result) => {   // Opretter collection 'quotes' i db hvis den ikke eksiterer, hvis den eksiterer så tilføjer den til collectionen.
-        if (err) return console.log(err);
+        if (err) return console.log(err);''
         console.log('saved to database');
         res.redirect('/'); // Returner brugeren tilbage til / for at undgå konstant loading-phase.
     })
 })
 
 app.put('/quotes', (req, res) => {
-    
+    db.collection('quotes') 
+    .findOneAndUpdate({name: 'Mathias'}, {
+      $set: {  // Muligheder for at ÆNDRE indholdet.
+        name: req.body.name,
+        quote: req.body.quote
+      }
+    }, {
+      sort: {_id: -1}, // Viser den seneste entry i databasen.
+      upsert: true // I tilfælde af der ikke er oprettet nogen entry, vil der blive oprettet én.
+    }, (err, result) => {
+      if (err) return res.send(err)
+      res.send(result)
+    })
+  })
+
+  app.delete('/quotes', (req, res) => {
+    db.collection('quotes').findOneAndDelete({name: req.body.name},
+    (err, result) => {
+      if (err) return res.send(500, err)
+      res.send({message: 'Én quote blev slettet'})
+    })
   })
 
 console.log('Hello world!');
